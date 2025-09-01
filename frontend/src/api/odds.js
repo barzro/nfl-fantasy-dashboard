@@ -1,12 +1,17 @@
-import API from "./client";
+import client from "./client";
 
-export const getUpcomingOdds = async () => {
-  const res = await API.get("/odds/upcoming");
+export const getOdds = async () => {
+  const res = await client.get("/api/odds/upcoming");
   return res.data;
 };
 
-export const generateParlay = async (legs = 3) => {
-  const res = await API.post(`/parlay/generate?legs=${legs}`);
+export const getRecommendedParlay = async (legs = 5) => {
+  const res = await client.get(`/api/parlay/recommended?legs=${legs}`);
+  return res.data;
+};
+
+export const calculateParlay = async (odds, wager) => {
+  const res = await client.post("/api/parlay/calculate", { odds, wager });
   return res.data;
 };
 

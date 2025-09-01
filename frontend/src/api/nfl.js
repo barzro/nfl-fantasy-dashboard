@@ -1,7 +1,7 @@
-import API from "./client";
+import client from "./client";
 
-export const getScores = async () => {
-  const res = await API.get("/nfl/scores");
+export const getLiveGames = async () => {
+  const res = await client.get("/api/games/live");
   return res.data;
 };
 
