@@ -1,9 +1,6 @@
-export default function App() {
-  return (
-    <div style={{ padding: "40px", textAlign: "center" }}>
-      <h1>🚀 React is working!</h1>
-      <p>If you see this text, your frontend build is fine ✅</p>
-    </div>
-  );
-}
+import LiveGames from "./components/LiveGames.jsx";
+import FantasyScores from "./components/FantasyScores.jsx";
+import BestBets from "./components/BestBets.jsx";
+import ParlayBuilder from "./components/ParlayBuilder.jsx";
+import RecommendedParlay from "./components/RecommendedParlay.jsx";
 
