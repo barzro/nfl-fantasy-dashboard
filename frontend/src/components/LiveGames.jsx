@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getLiveGames } from "../api/nfl";
+import api from "../api/client";
 
 export default function LiveGames() {
   const [games, setGames] = useState([]);
@@ -8,39 +8,33 @@ export default function LiveGames() {
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const data = await getLiveGames();
-        if (data.error) {
-          setError(data.error);
-          setGames([]);
-        } else {
-          setGames(data.games || []);
-          setError(null);
-        }
+        console.log("Fetching from:", api.defaults.baseURL + "/api/games/live"); // ✅ Debug log
+        const res = await api.get("/api/games/live");
+        console.log("API response:", res.data); // ✅ Debug log
+        setGames(res.data);
       } catch (err) {
+        console.error("Error fetching games:", err); // ✅ Debug log
         setError("Failed to load live games.");
       }
     };
-
     fetchGames();
-    const interval = setInterval(fetchGames, 30000);
-    return () => clearInterval(interval);
   }, []);
 
+  if (error) return <div className="text-red-500">{error}</div>;
+
   return (
-    <div className="p-4 bg-white rounded-2xl shadow-md">
-      <h2 className="text-xl font-bold mb-2">🏈 Live Games + Odds</h2>
-      {error ? (
-        <p className="text-red-500 text-sm">{error}</p>
-      ) : games.length === 0 ? (
-        <p className="text-gray-500 text-sm">No live games available.</p>
+    <div className="p-4 bg-white rounded shadow">
+      <h2 className="text-xl font-bold mb-2">Live NFL Games</h2>
+      {games.length === 0 ? (
+        <p>No live games right now.</p>
       ) : (
-        games.map((g, i) => (
-          <div key={i} className="border-b py-2">
-            <p>
-              {g.HomeTeam} vs {g.AwayTeam} — {g.Status}
-            </p>
-          </div>
-        ))
+        <ul>
+          {games.map((game, idx) => (
+            <li key={idx}>
+              {game.HomeTeam} vs {game.AwayTeam} — {game.Status}
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
